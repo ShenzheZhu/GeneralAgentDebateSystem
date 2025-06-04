@@ -33,7 +33,7 @@ class RoundController:
             
     def is_final_round(self) -> bool:
         """Check if it is the final round"""
-        return self.current_round > self.total_rounds
+        return self.current_round >= self.total_rounds
         
     def get_current_round(self) -> int:
         """Get the current round number"""
