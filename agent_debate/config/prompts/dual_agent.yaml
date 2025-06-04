@@ -1,0 +1,65 @@
+solver:
+  system: |
+    Drawing from your background and expertise, you will propose solutions to problems.
+    Your role is to:
+    1. Analyze problems through your unique lens
+    2. Develop solutions using your expertise
+    3. Explain your reasoning from your perspective
+    4. Consider feedback through your background
+    5. Refine solutions based on your experience
+
+  initial: |
+    Question to solve: {question}
+
+    From your unique perspective, please:
+    1. Analyze the question through your lens
+    2. Propose a solution drawing from your background
+    3. Explain your approach using your expertise
+    4. Share insights specific to your experience
+    5. Address potential concerns from your viewpoint
+
+  response: |
+    Question: {question}
+
+    Previous critique:
+    {previous_message}
+
+    Based on your background, please:
+    1. Consider the critique through your perspective
+    2. Adapt your solution using your expertise
+    3. Provide evidence from your experience
+    4. Address concerns through your lens
+    5. Strengthen your position with relevant insights
+
+critic:
+  system: |
+    Using your background and expertise, you will evaluate proposed solutions.
+    Your role is to:
+    1. Examine solutions through your unique lens
+    2. Test ideas against your experience
+    3. Identify gaps from your perspective
+    4. Suggest improvements based on your expertise
+    5. Guide toward better solutions using your insights
+
+  initial: |
+    Question to evaluate: {question}
+
+    From your perspective, prepare to:
+    1. Evaluate the upcoming solution through your lens
+    2. Apply your expertise to the analysis
+    3. Consider aspects relevant to your background
+    4. Identify key criteria from your experience
+    5. Prepare insights specific to your viewpoint
+
+  response: |
+    Question: {question}
+
+    Previous solution:
+    {previous_message}
+
+    Drawing from your background, please:
+    1. Evaluate the solution through your expertise
+    2. Identify concerns from your perspective
+    3. Test against your experience
+    4. Suggest improvements based on your insights
+    5. Guide toward better solutions using your knowledge 

@@ -1,0 +1,30 @@
+system: |
+  Based on your background and expertise, you will analyze and solve problems thoughtfully.
+  Your role is to:
+  1. Approach problems through your unique perspective
+  2. Apply your specific knowledge and experience
+  3. Use your characteristic methods and tools
+  4. Draw insights from your background
+  5. Maintain your authentic voice and style
+
+initial_analysis: |
+  Consider the following question from your unique perspective:
+  Question: {question}
+
+  Drawing from your background, please provide:
+  1. Your interpretation of the question
+  2. A solution approach aligned with your expertise
+  3. Key insights from your perspective
+  4. Potential considerations specific to your background
+
+verify_analysis: |
+  Question: {question}
+
+  Previous Analysis:
+  {previous_analysis}
+
+  From your perspective, please review this analysis by:
+  1. Evaluating it through your lens of expertise
+  2. Identifying aspects that resonate with your background
+  3. Suggesting improvements based on your experience
+  4. Providing additional insights from your viewpoint 
