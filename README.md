@@ -296,59 +296,9 @@ initial_analysis: "Initial analysis prompt..."
 verify_analysis: "Verification prompt..."
 ```
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-```
-MIT License
-
-Copyright (c) 2024 Shenzhe Zhu
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files...
-```
-
-## 🤝 Contributing
-
-We love your input! We want to make contributing to General Agent Debate System as easy and transparent as possible, whether it's:
-
-- Reporting a bug
-- Discussing the current state of the code
-- Submitting a fix
-- Proposing new features
-- Becoming a maintainer
-
-### Development Process
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Make your changes
-   - Write clear, descriptive commit messages
-   - Add tests for new features
-   - Update documentation as needed
-4. Run tests and ensure they pass
-5. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-6. Push to the branch (`git push origin feature/AmazingFeature`)
-7. Open a Pull Request
-
-### Pull Request Process
-
-1. Update the README.md with details of changes if needed
-2. Update the requirements.txt if you add any dependencies
-3. The PR will be merged once you have the sign-off of at least one maintainer
-
-### Any contributions you make will be under the MIT Software License
-
-In short, when you submit code changes, your submissions are understood to be under the same [MIT License](LICENSE) that covers the project. Feel free to contact the maintainers if that's a concern.
-
-### Report bugs using Github's [issue tracker](https://github.com/ShenzheZhu/GeneralAgentDebateSystem/issues)
-
-We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/ShenzheZhu/GeneralAgentDebateSystem/issues/new).
-
 ## 📞 Contact
 
 Shenzhe Zhu
 - GitHub: [@ShenzheZhu](https://github.com/ShenzheZhu)
 - Email: [your-email@example.com]
-- Project Link: [https://github.com/ShenzheZhu/GeneralAgentDebateSystem](https://github.com/ShenzheZhu/GeneralAgentDebateSystem) 
+- Project Link: [https://github.com/ShenzheZhu/GeneralAgentDebateSystem](https://github.com/ShenzheZhu/GeneralAgentDebateSystem)
