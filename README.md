@@ -28,10 +28,19 @@ A flexible and extensible multi-agent debate framework that enables AI agents to
 
 ### Prerequisites
 
+- Python 3.8 or higher
+- Git
+- Access to LLM APIs (DeepSeek, OpenAI)
+- 8GB RAM minimum
+
 ```bash
 # Clone the repository
 git clone https://github.com/ShenzheZhu/GeneralAgentDebateSystem.git
 cd GeneralAgentDebateSystem
+
+# Create and activate virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -47,6 +56,13 @@ DEEPSEEK_API_KEY = ["your-deepseek-key"]
 
 2. Choose or customize agent backgrounds in `agent_debate/config/backgrounds/`
 
+3. Prepare the dataset:
+```bash
+# Download the GSM8K mini dataset
+mkdir -p dataset
+wget https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data/mini.jsonl -O dataset/gsm8k_mini.jsonl
+```
+
 ### Running Tests
 
 ```bash
@@ -55,6 +71,19 @@ python run_test.py
 
 # Run specific test
 python tests/test_gsm8k.py
+```
+
+### Example Output
+
+After running the tests, you can find the debate reports in the `debate_reports` directory:
+```
+debate_reports/
+├── single_agent/
+│   └── debate_report_q0.json
+├── dual_agent/
+│   └── debate_report_q0.json
+└── multi_agent/
+    └── debate_report_q0.json
 ```
 
 ## 🏗️ System Architecture
@@ -95,38 +124,128 @@ python tests/test_gsm8k.py
 
 ### 1. Single Agent Mode
 ```python
+from agent_debate.agents.agent_factory import AgentFactory
+from agent_debate.core.debate_manager import DebateManager
+from agent_debate.judges.llm_judge import LLMJudge
+
+# Create debate manager and judge
+judge = LLMJudge(model_name="deepseek-chat")
+debate_manager = DebateManager(
+    topic="What is the solution to climate change?",
+    total_rounds=2,
+    judge_system=judge
+)
+
+# Create and configure agent
 agent = AgentFactory.create_agent(
     mode="single",
     agent_id="agent_1",
-    question="your_question",
+    question="What is the solution to climate change?",
+    model_name="deepseek-chat",
     background_config={
         "category": "academic",
         "role": "professor"
     }
 )
+
+# Register agent and start debate
+debate_manager.register_agent(agent)
+result = debate_manager.start_debate()
+
+# Process results
+final_answer = result["final_answers"]["agent_1"]
+debate_history = result["debate_history"]["messages"]
+print(f"Final Answer: {final_answer}")
 ```
 
 ### 2. Dual Agent Mode
 ```python
+# Create debate manager
+debate_manager = DebateManager(
+    topic="Is AI consciousness possible?",
+    total_rounds=3,
+    judge_system=LLMJudge(model_name="deepseek-chat")
+)
+
+# Define background configurations
+background_config = {
+    "solver": {"category": "professional", "role": "engineer"},
+    "critic": {"category": "academic", "role": "researcher"}
+}
+
+# Create solver and critic agents
 solver = AgentFactory.create_agent(
     mode="dual",
     agent_id="solver",
+    question="Is AI consciousness possible?",
+    model_name="deepseek-chat",
     role="solver",
-    question="your_question",
-    background_config={
-        "solver": {"category": "professional", "role": "engineer"},
-        "critic": {"category": "academic", "role": "researcher"}
-    }
+    background_config=background_config
 )
+
+critic = AgentFactory.create_agent(
+    mode="dual",
+    agent_id="critic",
+    question="Is AI consciousness possible?",
+    model_name="deepseek-chat",
+    role="critic",
+    background_config=background_config
+)
+
+# Register agents and start debate
+debate_manager.register_agent(solver)
+debate_manager.register_agent(critic)
+result = debate_manager.start_debate()
+
+# Process results
+solver_answer = result["final_answers"]["solver"]
+critic_answer = result["final_answers"]["critic"]
+debate_rounds = result["debate_history"]["rounds"]
 ```
 
 ### 3. Multi Agent Mode
 ```python
-agents = [
+# Create debate manager
+debate_manager = DebateManager(
+    topic="How to improve education system?",
+    total_rounds=2,
+    judge_system=LLMJudge(model_name="deepseek-chat")
+)
+
+# Define agent backgrounds
+backgrounds = [
     {"agent_id": "academic_expert", "category": "academic", "role": "professor"},
     {"agent_id": "professional_expert", "category": "professional", "role": "engineer"},
     {"agent_id": "creative_expert", "category": "creative", "role": "philosopher"}
 ]
+
+# Create and register agents
+for i, bg in enumerate(backgrounds):
+    agent = AgentFactory.create_agent(
+        mode="multi",
+        agent_id=bg["agent_id"],
+        question="How to improve education system?",
+        model_name="deepseek-chat",
+        agent_index=i,
+        background_config=backgrounds
+    )
+    debate_manager.register_agent(agent)
+
+# Start debate and get results
+result = debate_manager.start_debate()
+
+# Process results
+final_judgment = result["final_judgment"]
+individual_answers = result["final_answers"]
+debate_statistics = result["statistics"]
+
+# Save debate report
+from datetime import datetime
+import json
+
+report_path = f"debate_reports/multi_agent/debate_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+with open(report_path, 'w', encoding='utf-8') as f:
+    json.dump(result, f, ensure_ascii=False, indent=2)
 ```
 
 ## 📊 Output Format
@@ -179,16 +298,57 @@ verify_analysis: "Verification prompt..."
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2024 Shenzhe Zhu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files...
+```
 
 ## 🤝 Contributing
 
+We love your input! We want to make contributing to General Agent Debate System as easy and transparent as possible, whether it's:
+
+- Reporting a bug
+- Discussing the current state of the code
+- Submitting a fix
+- Proposing new features
+- Becoming a maintainer
+
+### Development Process
+
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. Make your changes
+   - Write clear, descriptive commit messages
+   - Add tests for new features
+   - Update documentation as needed
+4. Run tests and ensure they pass
+5. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+6. Push to the branch (`git push origin feature/AmazingFeature`)
+7. Open a Pull Request
+
+### Pull Request Process
+
+1. Update the README.md with details of changes if needed
+2. Update the requirements.txt if you add any dependencies
+3. The PR will be merged once you have the sign-off of at least one maintainer
+
+### Any contributions you make will be under the MIT Software License
+
+In short, when you submit code changes, your submissions are understood to be under the same [MIT License](LICENSE) that covers the project. Feel free to contact the maintainers if that's a concern.
+
+### Report bugs using Github's [issue tracker](https://github.com/ShenzheZhu/GeneralAgentDebateSystem/issues)
+
+We use GitHub issues to track public bugs. Report a bug by [opening a new issue](https://github.com/ShenzheZhu/GeneralAgentDebateSystem/issues/new).
 
 ## 📞 Contact
 
-Shenzhe Zhu - [GitHub](https://github.com/ShenzheZhu) 
+Shenzhe Zhu
+- GitHub: [@ShenzheZhu](https://github.com/ShenzheZhu)
+- Email: [your-email@example.com]
+- Project Link: [https://github.com/ShenzheZhu/GeneralAgentDebateSystem](https://github.com/ShenzheZhu/GeneralAgentDebateSystem) 
